@@ -1,0 +1,32 @@
+Format: 1.8
+Date: Thu, 09 Jan 2014 09:22:37 +0530
+Source: universal
+Binary: universal
+Architecture: source amd64
+Version: 1.1-1
+Distribution: stable
+Urgency: low
+Maintainer: Shubham Chaudhary <chaudhary@unknown>
+Changed-By: Shubham Chaudhary <shubham.chaudhary@kdemail.net>
+Description: 
+ universal  - <insert up to 60 chars description>
+Closes: 1
+Changes: 
+ universal (1.1-1) stable; urgency=low
+ .
+   * Initial release (Closes: #1)  <Update function>
+Checksums-Sha1: 
+ fc43d92237ebe2315366edea8543236470adb5ed 822 universal_1.1-1.dsc
+ 70f1e25fd3c5c6735615b484ff42d4a9cb60cb69 13944 universal_1.1.orig.tar.xz
+ 668afa6f57f5f814c177593e27d8297459e78992 9624 universal_1.1-1.debian.tar.gz
+ e6470710bf62865e876a820196598f974bdf3ab1 5154 universal_1.1-1_amd64.deb
+Checksums-Sha256: 
+ b72a49eb2c784ce9f957698226fbff71c11f9aa3f54043302bca6a39c6598445 822 universal_1.1-1.dsc
+ 03ce5065935cbfbd7a5e012f3db3aab5d76a775532301983d254d8cc2a82f23a 13944 universal_1.1.orig.tar.xz
+ 113173d8518cfb3dc154588587cd7b0ce7ef3e854831c3827f998484735dcb70 9624 universal_1.1-1.debian.tar.gz
+ 761b9399ae25d28376fe86faecc64cf4ee1677c97ff39a4609d2909e63026f22 5154 universal_1.1-1_amd64.deb
+Files: 
+ 9625652d7772c91f873a66f8a80f48a2 822 unknown extra universal_1.1-1.dsc
+ d77e300be85b74771763a91dab0aa531 13944 unknown extra universal_1.1.orig.tar.xz
+ 2d9138a3af499a44e9997b025d64173e 9624 unknown extra universal_1.1-1.debian.tar.gz
+ ed8b8e41e7c2824be40ba9204e17df43 5154 unknown extra universal_1.1-1_amd64.deb

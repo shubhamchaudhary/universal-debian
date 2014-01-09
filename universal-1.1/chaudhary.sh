@@ -1,6 +1,6 @@
 #  chaudhary.sh
 #
-#  Copyright (c) 2011-2013 Shubham Chaudhary <shubhamchaudhary92@gmail.com>
+#  Copyright (c) 2011-2013 Shubham Chaudhary <shubham.chaudhary@kdemail.net>
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -57,7 +57,7 @@ function helpFun {
     echo "    #                                                     #"
     echo "    # Compaitable with '.c' '.cpp' '.py' '.java' files    #"
     echo "    #                                                     #"
-    echo "    # Update Version: \`chaudhary.sh download\`             #"
+    echo "    # Update Version: \`chaudhary.sh update\`               #"
     echo "    #              Or see README.md to get download link  #"
     echo "    #                                                     #"
     echo "    #######################################################"
@@ -70,26 +70,32 @@ function helpFun {
 ############ Do automated testing by taking inputs from $filename.test file for C & C++ ##################
 function memoryTest {
     if test $compiled == true ; then
-        #echo    #newline
-        if test -f $filename.test && test "$2" == "t" ; then
+        echo #newline
+        if test -f $filename.test; then
             echo " * * * Valgrind Test: $filename.test found * * *"
-            time cat $filename.test | valgrind ./$filename.out
-        elif test -f $filename.test && test "$2" == "t1" ; then
-            echo " * * * Valgrind Test: $filename.test found * * *"
-            time cat $filename.test | valgrind --leak-check=full ./$filename.out
-        elif test -f $filename.test && test "$2" == "t2" ; then
-            echo " * * * Valgrind Test: $filename.test found * * *"
-            time cat $filename.test | valgrind --leak-check=full -v ./$filename.out
-        elif test -f $filename.test && test "$2" == "t3" ; then
-            echo " * * * Valgrind Test: $filename.test found * * *"
-            time cat $filename.test | valgrind --leak-check=full --show-reachable=yes --track-origins=yes -v ./$filename.out
-        #else    #No test arguments
-            #echo    #newline
-            #echo "= = = For Copy/Paste = = = "
-            #echo "time cat $filename.test | valgrind ./$filename.out                                                                 #[ t  ]"
-            #echo "time cat $filename.test | valgrind --leak-check=full ./$filename.out                                               #[ t1 ]"
-            #echo "time cat $filename.test | valgrind --leak-check=full -v ./$filename.out                                            #[ t2 ]"
-            #echo "time cat $filename.test | valgrind --leak-check=full --show-reachable=yes --track-origins=yes -v ./$filename.out   #[ t3 ]"
+            if test "$2" == "t" ; then
+                time cat $filename.test | valgrind ./$filename.out
+                code=$?
+            elif  test "$2" == "t1" ; then
+                time cat $filename.test | valgrind --leak-check=full ./$filename.out
+                code=$?
+            elif test "$2" == "t2" ; then
+                time cat $filename.test | valgrind --leak-check=full -v ./$filename.out
+                code=$?
+            elif test "$2" == "t3" ; then
+                time cat $filename.test | valgrind --leak-check=full --show-reachable=yes --track-origins=yes -v ./$filename.out
+                code=$?
+            else    #No test arguments
+                #echo    #newline
+                echo "= = = For Copy/Paste = = = "
+                echo "time cat $filename.test | valgrind ./$filename.out"                                                                 #[ t  ]"
+                #echo "time cat $filename.test | valgrind --leak-check=full ./$filename.out                                               #[ t1 ]"
+                #echo "time cat $filename.test | valgrind --leak-check=full -v ./$filename.out                                            #[ t2 ]"
+                #echo "time cat $filename.test | valgrind --leak-check=full --show-reachable=yes --track-origins=yes -v ./$filename.out   #[ t3 ]"
+                code="Not performed"
+            fi
+            echo #newline
+            echo "The test exited with exit code: $code"
         fi
         echo    #newline
     fi
@@ -104,8 +110,34 @@ then
     exit 0
 elif test "$1" == "download"
 then
-    wget -c ./ https://github.com/ishubhamch/universal/archive/master.zip # || echo "Download Failed, Check your connection and try again"
+    wget -c ./ https://github.com/shubhamchaudhary/universal/archive/master.zip # || echo "Download Failed, Check your connection and try again"
     echo "Extract master.zip files and follow further instructions available in README.md"
+    exit 0
+elif test "$1" == "update"
+then
+    #if -n command -v wget >/dev/null 2>&1    #because in bash 0 is success
+    #then
+    #    echo "wget not found. Use \nsudo apt-get install wget"
+    #    exit 1;
+    #fi
+    echo "It'll be best if you perform this in an empty folder as your current directory"
+    command -v wget >/dev/null 2>&1 || { echo >&2 "Hey I need wget but it's not installed.";
+                                               echo "Copy/Paste ===> sudo apt-get install wget unzip"; echo "Aborting :("; echo; exit 1; }
+    command -v unzip >/dev/null 2>&1 || { echo >&2 "Hey I require zip tools but they are not installed.";
+                                               echo "Copy/Paste ===> sudo apt-get install unzip"; echo "Aborting :("; echo; exit 1; }
+    wget -c ./ https://github.com/shubhamchaudhary/universal/archive/master.zip || echo "Download Failed, Check your internet connection and try again";
+    unzip master.zip ;		# create a folder universal- master in the current folder 
+    cd universal-master/
+    ./install
+    cd ../
+    rm -rf ./universal-master master.zip
+elif test "$1" == "problem"
+then
+    echo "Thanks in advance for taking the time out"
+    echo "Click on the green New Issue button on right side"
+    echo "Opening the browser: "
+    xdg-open "https://github.com/shubhamchaudhary/juk/issues"
+    #xdg-open "https://github.com/shubhamchaudhary/juk/issues/new"
     exit 0
 fi
 ##### Variables ####
@@ -131,10 +163,11 @@ function main {
         fi
         filename=${1:0:nameLen-2}     #striping last 2 char i.e. '.c'
         echo " = = = = = = GCC: Compiling $filename .c file = = = = = ="
-        echo "gcc -g -O2 -Wall -Wextra -Isrc -rdynamic -O2 -fomit-frame-pointer -o $filename.out $1"
+        echo "gcc -g -O2 -std=gnu99 -static -Wall -Wextra -Isrc -rdynamic -fomit-frame-pointer -o $filename.out $1 -lm -lrt"    #-g to make gdb compaitable
         echo "Error(if any):"   #newline
-        command gcc -g -O2 -Wall -Wextra -Isrc -rdynamic -O2 -fomit-frame-pointer -o $filename.out $1 || compiled=false;
-        memoryTest
+        command gcc -g -O2 -std=gnu99 -Wall -Wextra -Isrc -rdynamic -fomit-frame-pointer -o $filename.out $1 -lm -lrt || compiled=false;
+        echo "gcc exited with $?"
+        memoryTest $1 $2 $3
         $compiled && echo "For Copy/Paste ===> ./$filename.out"
         #gcc -Werror -pedantic-errors -std=c99 -O2 -fomit-frame-pointer -o prog prog.c #C99 strict (gcc-4.3.2)
         #echo ".c file found"
@@ -147,10 +180,10 @@ function main {
                                                  echo "Copy/Paste ===> sudo apt-get install g++"; echo "Aborting :("; echo; exit 1; }
         filename=${1:0:nameLen-4}     #striping last 2 char i.e. '.c' i.e keep from 0 till nameLen -4
         echo " - - - - - - G++: Compiling $filename .cpp file - - - - - -"
-        echo "g++ -g -O2 -Wall -Wextra -Isrc -rdynamic -O2 -fomit-frame-pointer -o $filename.out $1" 
+        echo "g++ -g -O2 -std=gnu++0x -static -Wall -Wextra -Isrc -rdynamic -fomit-frame-pointer -o $filename.out $1" 
         echo "Error(if any):"   #newline
-        command g++ -g -O2 -Wall -Wextra -Isrc -rdynamic -O2 -fomit-frame-pointer -o $filename.out $1 || compiled=false
-        memoryTest
+        command g++ -g -O2 -std=gnu++0x -Wall -Wextra -Isrc -rdynamic -O2 -fomit-frame-pointer -o $filename.out $1 || compiled=false
+        memoryTest $1 $2 $3
         $compiled && echo "For Copy/Paste ===> ./$filename.out"
         #echo ".cpp file found"
     
@@ -196,7 +229,7 @@ function main {
     then
         echo    #newline
         echo "Ouch, The process of compilation failed."
-        echo "For Copy/Paste ===> gedit $1"
+        echo "For Copy/Paste ===> vi $1"
         compiled=false
     fi
 } #end of main function
@@ -204,4 +237,4 @@ function main {
 #else    #Show Usage & Help
     #usage
 #fi
-main $1
+main $1 $2 $3

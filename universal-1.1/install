@@ -1,0 +1,115 @@
+#  install
+#
+#  Copyright (c) 2012-2013 Shubham Chaudhary <shubham.chaudhary@kdemail.net>
+#
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 2 of the License, or
+#  (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with this program; if not, write to the Free Software
+#  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+#  MA 02110-1301, USA.
+#  
+#  
+
+#This script installs universal compilation tool for different programming languages
+#clear
+installPath="/usr/local/bin"
+filename="chaudhary.sh"
+file="/usr/local/bin/chaudhary.sh"
+current_directory=`pwd`
+echo    #newline
+helpInstall(){ 
+    #Show Usage & Help
+    #echo "# # # # # # # # # # # # # # # # # # # # # # # # # # # #"
+    echo "  ###################################################################"
+    echo "  #      + + + Universal Compiler Installation Help + + +       (c) #"
+    echo "  #                                                                 #"
+    echo "  # USAGE:  Just type this command to execute installation process: #" 
+    echo "  #   \`./install\`                                                   #"
+    echo "  #         This'll install Universal Compiler in it's proper place #"
+    echo "  #                                                                 #"
+    echo "  # Warning: Please don't forget that installation requires 'sudo'  #"
+    echo "  #          permissions. Provide password when asked or run as su. #"
+    echo "  #                                                                 #"
+    echo "  # Note   : If install file does not have execution permission you #"
+    echo "  #          should execute this command first                      #"  
+    echo "  #   \`sudo chmod 777 install chaudhary.sh\`                         #"
+    echo "  #                                                                 #"
+    echo "  # To Uninstall previous installations type:                       #"
+    echo "  #   \`./install uninstall\`                                         #"
+    echo "  #                                                                 #"
+    echo "  ###################################################################"
+    echo "  # Program: Universal Compiler - Programming made easy             #"
+    echo "  # Author : Shubham Chaudhary                                      #"
+    echo "  ###################################################################"
+    #echo "# # # # # # # # # # # # # # # # # # # # # # # # # # # #"
+    echo    #newline
+}
+if test "$1" == "help"
+then
+    helpInstall
+    exit 0
+fi
+if test "$1" == "uninstall"
+then
+    echo "About to uninstall Universal Compiler Tool"
+    echo "Are you sure ? <Y/N>"
+    read sure
+    if test sure == 'Y'
+    then
+        sudo rm "/usr/bin/$filename" "/usr/local/bin/c" "$installPath/universal"
+        exit 0
+    fi
+fi
+echo "You can get help or uninstall using : "
+echo "./install help"
+echo "./install uninstall"
+echo    #newline
+
+#echo "To continue installation hit Enter"
+#read
+
+echo    #newline
+echo " * * * Installing Universal Compilation Tool * * *"
+echo "  ############################################################"
+echo "  # Tool Name :  Universal Compiler - Programming made easy  #"
+echo "  # Author    :  Shubham Chaudhary                           #"
+echo "  ############################################################"
+if [ ! -f "$file" ] ; then
+    echo " * * * Copying Files * * *"
+    sudo cp "$current_directory/chaudhary.sh" "$installPath/$filename"
+    #echo "   * * * Done * * * "
+elif [ "$file" -ot "$current_directory/$filename" ]; then
+    echo "Older Version found and will be updated now"
+    sudo cp "$current_directory/chaudhary.sh" "$installPath/$filename"
+#else  
+#    helpInstall
+fi
+#echo "Create Shortcuts? <y/n>"
+#read shortcut
+shortcut="y"
+if [ "$shortcut" == "y" ]; then
+#    if [ ! -f ~/.bash_aliases ]; then
+#        touch ~/.bash_aliases
+#    fi
+#    echo "Appending in ~/.bash_aliases"
+#    echo "alias c='/usr/local/bin/chaudhary.sh'" >> ~/.bash_aliases
+    echo "Creating symbolic links"
+    sudo cp -s "$file" "/usr/bin/$filename"
+    sudo cp -s "$file" "/usr/local/bin/c"
+    sudo cp -s "$file" "$installPath/universal"
+fi
+echo "Delete files? <y/n>"
+read del
+del="y"
+if [ "$del" == "y" ]; then
+    rm -f universal.pl chaudhary.sh install README.md
+fi

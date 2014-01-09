@@ -1,0 +1,10 @@
+Package: universal
+Version: 1.1-1
+Architecture: amd64
+Maintainer: Shubham Chaudhary <chaudhary@unknown>
+Installed-Size: 43
+Section: unknown
+Priority: extra
+Homepage: <insert the upstream URL, if relevant>
+Description: <insert up to 60 chars description>
+ <insert long description, indented with spaces>
